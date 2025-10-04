@@ -49,11 +49,11 @@ vector<int> select_songs(vector<int> init, vector<int> duration){
     });
 
     selected.push_back(finish_time[1].second);
-    int last_song = finish_time[1].first;  
+    int last_finish = finish_time[1].first;  
     for (size_t i = 2; i < finish_time.size(); i++) {
-        if (init[finish_time[i].second] >= last_song) {
+        if (init[finish_time[i].second] >= last_finish) {
             selected.push_back(finish_time[i].second);
-            last_song = finish_time[i].first;
+            last_finish = finish_time[i].first;
         }
     }
     return selected;
