@@ -37,7 +37,7 @@
 using namespace std;
 
 vector<int> select_songs(vector<int> init, vector<int> duration){
-    vector<pair<int, int>> finish_time(init.size(), make_pair(0,0));
+    vector<pair<int, int>> finish_time(init.size(), make_pair(-1,-1));
     vector<int> selected;
 
     for (size_t song = 1; song < init.size(); song++) {
