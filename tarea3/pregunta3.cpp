@@ -96,7 +96,7 @@ class SegmentTree {
 				exit(1);
 			}
 			// Si el rango del nodo actual no se solapa con el rango de consulta
-			// retornar un nodo neutro
+			// retornar un nodo neutro. Equivale a "delegar" a un solo nodo.
 			if (tree[id]->fin < inicio_q || tree[id]->inicio > fin_q) {
 				return new Nodo(0, 0, 0, 0); // Nodo neutro
 			}
@@ -125,7 +125,7 @@ class SegmentTree {
 			adj.resize(4 * size);			// Tamaño máximo del árbol de segmentos
 			build(s, 1, 0, size-1);			// Construcción del árbol de segmentos
 		}
-		
+
 		// Función pública para consultar el número máximo de paréntesis balanceados en un rango dado
 		int maxBP(int inicio_q, int fin_q) {
 			Nodo* result = query(1, inicio_q, fin_q);
