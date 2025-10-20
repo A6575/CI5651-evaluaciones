@@ -1,11 +1,8 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
 #include <climits>
 #include <string>
 #include <sstream>
-#include <stdexcept>
 
 using namespace std;
 
