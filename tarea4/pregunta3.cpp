@@ -29,20 +29,15 @@ class VirtualInitializer {
 
 		// Metodo para consultar el valor en una posicion del arreglo
 		int consultar(int pos) {
-			// Si la posicion no ha sido inicializada, retorna INT_MIN como indicador
+			// Si la posicion no ha sido inicializada, lanza una excepcion
 			if (this->b[pos] < 1 || this->b[pos] > this->counter || this->a[this->b[pos]] != pos) {
-				return INT_MIN;
+				throw runtime_error("La posicion " + to_string(pos) + " no ha sido inicializada previamente.");
 			}
 			return this->data[pos];
 		}
 		// Metodo para limpiar todos los arreglos
 		void limpiar() {
-			// Recorre las posiciones inicializadas y las resetea
-			while (this->counter > 0) {
-				int pos = this->a[this->counter--];
-				this->b[pos] = INT_MAX;
-				this->data[pos] = INT_MAX;
-			}
+			this->counter = 0; // Resetea el contador simplementemente para indicar que no hay posiciones inicializadas
 		}
 
 };
@@ -70,66 +65,70 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    cout << "--- Inicializacion virtual de arreglos ---\n\n";
+    cout << "\n--- Inicializacion virtual de arreglos ---\n\n";
     cout << "- Opciones disponibles:\n";
     cout << "  ASIGNAR POS VAL -> Asigna el valor VAL a la posición POS del arreglo.\n";
     cout << "  CONSULTAR POS -> Consulta el valor en la posición POS del arreglo.\n";
     cout << "  LIMPIAR -> Limpia todos los arreglos.\n";
     cout << "  SALIR -> Termina la ejecución del programa.\n\n";
+    cout << "** Nota: Las posiciones van desde 0 hasta " << size - 1 << ". **\n\n";
 
 	// Crea una instancia de VirtualInitializer
     VirtualInitializer initializer(size);
 
 	// Bucle principal para procesar comandos del usuario
     while (true) {
-        cout << "Ingrese un comando: ";
+        cout << ">>> Ingrese un comando: ";
         string command;
 		getline(cin, command);
 		stringstream ss(command);
 		ss >> command;
 		
         if (command == "SALIR") {
-            cout << "Terminando la ejecución." << endl;
+            cout << "Terminando la ejecución.\n" << endl;
             break;
         } else if (command == "ASIGNAR") {
+            int pos, val;
+
             try {
-                int pos, val;
                 ss >> pos >> val;
 
                 if (pos < 0 || pos >= size) {
-                    cout << "Error: La posición " << pos << " está fuera de los límites del arreglo." << endl;
+                    cout << "Error: La posición " << pos << " está fuera de los límites del arreglo.\n" << endl;
                     continue;
                 }
 
                 initializer.asignar(pos, val);
-                cout << "Asignando valor " << val << " en la posición " << pos << "." << endl;
+
+                cout << "Asignando valor " << val << " en la posición " << pos << ".\n" << endl;
             } catch (const exception &e) {
-                cout << "Error al procesar ASIGNAR: " << e.what() << endl;
+                cout << "Error al procesar ASIGNAR: " << e.what() << "\n" << endl;
             }
         } else if (command == "CONSULTAR") {
+            int pos, value;
+            
             try {
-                int pos;
                 ss >> pos;
 
                 if (pos < 0 || pos >= size) {
-                    cout << "Error: La posición " << pos << " está fuera de los límites del arreglo." << endl;
+                    cout << "Error: La posición " << pos << " está fuera de los límites del arreglo.\n" << endl;
                     continue;
                 }
-
-                int value = initializer.consultar(pos);
-                if (value == INT_MIN) {
-                    cout << "La posición " << pos << " no ha sido asignada previamente." << endl;
-                } else {
-                    cout << "Valor en la posición " << pos << ": " << value << endl;
-                }
+                value = initializer.consultar(pos);
+            } catch (const runtime_error &e) {
+                cout << "Error: " << e.what() << "\n" << endl;
+                continue;
             } catch (const exception &e) {
-                cout << "Error al procesar CONSULTAR: " << e.what() << endl;
+                cout << "Error al procesar CONSULTAR: " << e.what() << "\n" << endl;
+                continue;
             }
+
+            cout << "Valor en la posición " << pos << ": " << value << "\n" << endl;
         } else if (command == "LIMPIAR") {
             initializer.limpiar();
-            cout << "Limpiando todos los arreglos." << endl;
+            cout << "Todos los arreglos han sido limpiados.\n" << endl;
         } else {
-            cout << "Comando no reconocido. Por favor intente de nuevo." << endl;
+            cout << "Comando no reconocido. Por favor intente de nuevo.\n" << endl;
         }
     }
 
