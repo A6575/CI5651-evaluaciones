@@ -1,42 +1,24 @@
 /*
- * Nota sobre la implementación del algoritmo de Emparejamiento Máximo:
- *
- * Este código NO crea los nodos 's' (fuente) y 't' (sumidero) explícitamente,
- * sino que implementa sus roles de forma implícita:
- *
- * 		1. El rol del nodo fuente lo cumple el bucle 'for' principal en
- * 		`find_min_elements_to_remove`. Al iterar por cada nodo impar 'i'
- * 		y llamar a `dfs_match(i)`, se "ofrece" un camino (flujo)
- * 		desde la fuente a cada nodo impar, uno por uno.
- *
- * 		2. El rol del nodo sumidero lo cumple la condición base dentro
- * 		de `dfs_match`. Cuando se encuentra un nodo par 'v' que está libre
- * 		(es decir, `matchR[v] == -1`), se ha encontrado un "camino aumentante"
- * 		completo. Esto es equivalente a encontrar un camino que llega
- * 		exitosamente hasta el sumidero 't'.
- */
-/*
  * Nota sobre la implementación y la Teoría de Flujo Máximo (Hopcroft-Karp):
  *
  * Este código NO crea 's' y 't' explícitamente, sino que implementa
  * sus roles de forma implícita, repartiéndolos entre las dos fases
  * del algoritmo (BFS y DFS):
  *
- * 1. El rol de la 'Fuente' (s): Lo cumple la función `bfs_hopcroft` (Paso 1).
- * Al buscar *todos* los nodos impares libres (`matchL[i] == -1`) y ponerlos
- * en la cola inicial con `dist = 0`, esta función actúa como una
- * super-fuente que "ofrece" un camino (flujo) a todos los nodos 'L'
- * (impares) a la vez, construyendo un "grafo de capas" (layer graph).
+ * 		1. El rol de la 'Fuente' (s): Lo cumple la función `bfs_hopcroft`.
+ * 		Al buscar todos los nodos impares libres (`matchL[i] == -1`) y ponerlos
+ * 		en la cola inicial con `dist = 0`. Se "ofrece" un camino (flujo) a todos los nodos 'L'
+ * 		(impares) a la vez, construyendo un "grafo de capas".
  *
- * 2. El rol del 'Sumidero' (t): Este rol se divide en dos:
- * a) El BFS lo *detecta*: Cuando el `bfs_hopcroft` encuentra un nodo par
- * libre (`matchR[v] == -1`), sabe que ha encontrado un camino
- * aumentante que llega al sumidero (y por eso devuelve `true`).
- *
- * b) El DFS lo *usa*: El caso base de éxito para `dfs_hopcroft` (Paso 2)
- * es también encontrar un nodo par libre (`matchR[v] == -1`),
- * que representa el paso final para "reclamar" ese camino y
- * "enviar el flujo" hasta el sumidero.
+ * 		2. El rol del 'Sumidero' (t): Este rol se divide en dos:
+ * 			a) Cuando el `bfs_hopcroft` encuentra un nodo par
+ * 			libre (`matchR[v] == -1`), sabe que ha encontrado un camino
+ * 			aumentante que llega al sumidero (y por eso devuelve `true`).
+ *			
+ * 			b) El caso base de éxito para `dfs_hopcroft`
+ * 			es también encontrar un nodo par libre (`matchR[v] == -1`),
+ * 			que representa el paso final para "reclamar" ese camino y
+ * 			"enviar el flujo" hasta el sumidero.
  */
 
 #include <iostream>
