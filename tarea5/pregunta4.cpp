@@ -50,14 +50,20 @@ bool is_prime(int n) {
 }
 
 // Función para separar el conjunto C en pares e impares
-void separate_set(const vector<int>& C, vector<int>& par, vector<int>& impar) {
+int separate_set(const vector<int>& C, vector<int>& par, vector<int>& impar) {
+    int count = 0;
 	for (int num : C) {
 		if (num % 2 == 0){
 			par.push_back(num);
 		}else{
+            if (num == 1) {
+                count++; // Contar el 1 como un elemento a eliminar
+                continue;
+            }
 			impar.push_back(num);
 		}
 	}
+    return count;
 }
 
 // Función para construir el grafo bipartito entre impares y pares con bases en la suma prima
@@ -165,7 +171,7 @@ int find_min_elements_to_remove(const vector<int>& C) {
     vector<int> impares;
     vector<int> pares;
 
-    separate_set(C, pares, impares);
+    int eliminated = separate_set(C, pares, impares);
 
 	// Generar el grafo bipartito
 	int N_impares = impares.size();
@@ -192,7 +198,7 @@ int find_min_elements_to_remove(const vector<int>& C) {
             }
         }
     }
-    return matching_size;
+    return matching_size + eliminated;
 }
 
 int main() {
