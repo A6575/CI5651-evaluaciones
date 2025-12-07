@@ -1,8 +1,10 @@
 import random
 
+# Genera un número aleatorio en el rango [minimo, maximo]
 def generar_numero_aleatorio(minimo, maximo):
     return random.randint(minimo, maximo)
 
+# Realiza la prueba de Miller-Rabin para una base 'a' y un número 'n'
 def BTest(a, n):
     if a <= 1 or a >= n - 1:
         return False
@@ -23,6 +25,8 @@ def BTest(a, n):
             return True
     return False
 
+# Implementa el test de primalidad de Miller-Rabin
+# Retorna una tupla (es_primo, iteraciones)
 def miller_rabin(n, k=10):
     if n <= 1 or n == 4:
         return False, 0
@@ -35,8 +39,9 @@ def miller_rabin(n, k=10):
             return False, i + 1
     return True, 10
 
+# Ejemplo de uso
 if __name__ == "__main__":
-    numero = 181093918109391810939
+    numero = 181093918109391810939  # Numero a probar
     es_primo, iteraciones = miller_rabin(numero)
     if es_primo:
         print(f"{numero} es probablemente primo.")

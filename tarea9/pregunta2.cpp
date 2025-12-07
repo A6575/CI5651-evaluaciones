@@ -5,6 +5,7 @@
 
 using namespace std;
 
+// Función para multiplicar una matriz por un vector
 vector<double> multiplicar_matriz_vector(const vector<vector<double>>& matriz, const vector<double>& vec) {
     size_t filas = matriz.size();
     size_t columnas = matriz[0].size();
@@ -23,29 +24,29 @@ vector<double> multiplicar_matriz_vector(const vector<vector<double>>& matriz, c
 bool verificarInversa(const vector<vector<double>>& A, const vector<vector<double>>& B, double epsilon) {
     int n = A.size();
     
-    // 1. Calcular k iteraciones necesarias según epsilon
+    // Calcular k iteraciones necesarias según epsilon
     // k >= log(1/epsilon) / log(2)
     int k = ceil(log(1.0 / epsilon) / log(2.0));
 
     // Configuración de aleatoriedad moderna
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> distrib(0, 1); // ¡Aquí están tu 0 y 1!
+    uniform_int_distribution<> distrib(0, 1); // 0s y 1s
 
     for (int iter = 0; iter < k; ++iter) {
-        // 2. Generar vector aleatorio r con 0s y 1s
+        // Generar vector aleatorio r con 0s y 1s
         vector<double> r(n);
         for (int i = 0; i < n; ++i) {
             r[i] = distrib(gen);
         }
 
-        // 3. Calcular x = B * r  (O(n^2))
+        // Calcular x = B * r
         vector<double> x = multiplicar_matriz_vector(B, r);
 
-        // 4. Calcular y = A * x  (O(n^2))
+        // Calcular y = A * x
         // Esto equivale a y = A * (B * r)
         vector<double> y = multiplicar_matriz_vector(A, x);
-        // 5. Verificar si y == r (con margen de error por ser doubles)
+        // Verificar si y == r (con margen de error por ser doubles)
         for (int i = 0; i < n; ++i) {
             if (abs(y[i] - r[i]) > 1e-9) { 
                 return false; // Testigo de que NO son inversas
